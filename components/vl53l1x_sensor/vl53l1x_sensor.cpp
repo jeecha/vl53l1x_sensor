@@ -207,6 +207,10 @@ void VL53L1XSensor::update() {
           ESP_LOGD(TAG, "'%s' - Got distance %i mm", this->name_.c_str(), distance_mm);
           this->publish_state(distance_m);
         }
+        int16_t ambient_rate_mcps = ambientRate();
+        int16_t avg_signal_rate_mcps = avgSignalRate();
+        int16_t peak_signal_rate_mcps = peakSignalRate();
+        ESP_LOGD(TAG, "'%s' - ambient %i MCPS, avg signal %i MCPS, peak signal %i MCPS", this->name_.c_str(), ambient_rate_mcps, avg_signal_rate_mcps, peak_signal_rate_mcps);
     } else {
         ESP_LOGD(TAG, "'%s' - data not ready", this->name_.c_str());
     }
@@ -286,6 +290,33 @@ int16_t VL53L1XSensor::distance() {
     }
     uint16_t distance = readWord(0x0096);
     return (int16_t)distance;
+}
+
+int16_t VL53L1XSensor::ambientRate() {
+    rangeStatus = getRangeStatus();
+    if (rangeStatus != 0x0) {
+        return -1;
+    }
+    uint16_t ambientRate = readWord(0x0090);
+    return (int16_t)ambientRate;
+}
+
+int16_t VL53L1XSensor::avgSignalRate() {
+    rangeStatus = getRangeStatus();
+    if (rangeStatus != 0x0) {
+        return -1;
+    }
+    uint16_t avgSignalRate = readWord(0x009E);
+    return (int16_t)avgSignalRate;
+}
+
+int16_t VL53L1XSensor::peakSignalRate() {
+    rangeStatus = getRangeStatus();
+    if (rangeStatus != 0x0) {
+        return -1;
+    }
+    uint16_t peakSignalRate = readWord(0x0098);
+    return (int16_t)peakSignalRate;
 }
 
 int8_t VL53L1XSensor::getRangeStatus() {

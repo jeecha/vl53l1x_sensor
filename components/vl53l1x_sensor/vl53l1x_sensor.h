@@ -43,6 +43,9 @@ class VL53L1XSensor : public sensor::Sensor, public PollingComponent, public i2c
 
     int8_t getRangeStatus();
     int16_t distance();
+    int16_t ambientRate();
+    int16_t avgSignalRate();
+    int16_t peakSignalRate();
     void set_distance_mode();
     void set_measurement_timing_budget();
     void set_signal_threshold();
