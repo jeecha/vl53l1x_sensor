@@ -202,15 +202,32 @@ void VL53L1XSensor::update() {
           // something went wrong!
           ESP_LOGD(TAG, "'%s' - Couldn't get distance: 0x%02X", this->name_.c_str(), rangeStatus);
           this->publish_state(NAN);
+          if (this->ambient_rate_sensor != nullptr) {
+            this->ambient_rate_sensor->publish_state(NAN);
+          }
+          if (this->avg_signal_rate_sensor != nullptr) {
+            this->avg_signal_rate_sensor->publish_state(NAN);
+          }
+          if (this->peak_signal_rate_sensor != nullptr) {
+            this->peak_signal_rate_sensor->publish_state(NAN);
+          }
         } else {
           float distance_m = (float)distance_mm / 1000.0;
           ESP_LOGD(TAG, "'%s' - Got distance %i mm", this->name_.c_str(), distance_mm);
           this->publish_state(distance_m);
+          if (this->ambient_rate_sensor != nullptr) {
+            int16_t ambient_rate_mcps = ambientRate();
+            this->ambient_rate_sensor->publish_state(ambient_rate_mcps);
+          }
+          if (this->avg_signal_rate_sensor != nullptr) {
+            int16_t avg_signal_rate_mcps = avgSignalRate();
+            this->avg_signal_rate_sensor->publish_state(avg_signal_rate_mcps);
+          }
+          if (this->peak_signal_rate_sensor != nullptr) {
+            int16_t peak_signal_rate_mcps = peakSignalRate();
+            this->peak_signal_rate_sensor->publish_state(peak_signal_rate_mcps);
+          }
         }
-        int16_t ambient_rate_mcps = ambientRate();
-        int16_t avg_signal_rate_mcps = avgSignalRate();
-        int16_t peak_signal_rate_mcps = peakSignalRate();
-        ESP_LOGD(TAG, "'%s' - ambient %i MCPS, avg signal %i MCPS, peak signal %i MCPS", this->name_.c_str(), ambient_rate_mcps, avg_signal_rate_mcps, peak_signal_rate_mcps);
     } else {
         ESP_LOGD(TAG, "'%s' - data not ready", this->name_.c_str());
     }
@@ -510,7 +527,7 @@ uint16_t VL53L1XSensor::encode_timeout(uint32_t timeout_mclks)
 }
 
 void VL53L1XSensor::set_signal_threshold() {
-    writeWord(0x0066,signal_threshold_>>3); # div by 1024 to convert KCPS to MCPS
+    writeWord(0x0066,signal_threshold_>>3); // div by 1024 to convert KCPS to MCPS
 }
 
 } //namespace vl53l1x

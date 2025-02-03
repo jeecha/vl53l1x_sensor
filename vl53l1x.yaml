@@ -12,10 +12,26 @@ logger:
 
 sensor:
   - platform: vl53l1x_sensor
-    name: Empty sensor
+    name: Default sensor
+  - platform: vl53l1x_sensor
+    name: Basic settings
     timing_budget: 20ms
     distance_mode: LONG
-
+  - platform: vl53l1x_sensor
+    name: Full config
+    enable_pin: GPIO10
+    distance_mode: MEDIUM
+    timing_budget: 200ms
+    signal_threshold: 512
+    update_interval: 1s
+    address: 0x32
+    accuracy_decimals: 2
+    ambient_rate_sensor:
+      name: "ambient_rate"
+    avg_signal_rate_sensor:
+      name: "avg_signal_rate"
+    peak_signal_rate_sensor:
+      name: "peak_signal_rate"
 i2c:
   sda: 4
   scl: 5

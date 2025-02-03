@@ -10,7 +10,7 @@ namespace vl53l1x {
 
 enum DistanceMode { Short=1, Medium=2, Long=3 };
 
-class VL53L1XSensor : public PollingComponent, public i2c::I2CDevice {
+class VL53L1XSensor : public sensor::Sensor, public PollingComponent, public i2c::I2CDevice {
     public:
     VL53L1XSensor();
 
@@ -26,6 +26,10 @@ class VL53L1XSensor : public PollingComponent, public i2c::I2CDevice {
     void set_distance_mode(DistanceMode dm) { this->distance_mode_ = dm; };
     void set_timing_budget(uint32_t us) { this->timing_budget_us_ = us; };
     void set_signal_threshold(uint16_t signal) { this->signal_threshold_ = signal; };
+
+    void set_ambient_rate_sensor(sensor::Sensor *ambient_rate_sensor) { this->ambient_rate_sensor = ambient_rate_sensor; }
+    void set_avg_signal_rate_sensor(sensor::Sensor *avg_signal_rate_sensor) { this->avg_signal_rate_sensor = avg_signal_rate_sensor; }
+    void set_peak_signal_rate_sensor(sensor::Sensor *peak_signal_rate_sensor) { this->peak_signal_rate_sensor = peak_signal_rate_sensor; }
 
     private:
     void setI2CAddress(uint8_t addr);
@@ -50,7 +54,6 @@ class VL53L1XSensor : public PollingComponent, public i2c::I2CDevice {
     void set_measurement_timing_budget();
     void set_signal_threshold();
 
-    sensor::Sensor *distance_sensor{nullptr};
     sensor::Sensor *ambient_rate_sensor{nullptr};
     sensor::Sensor *avg_signal_rate_sensor{nullptr};
     sensor::Sensor *peak_signal_rate_sensor{nullptr};

@@ -22,6 +22,9 @@ VL53L1XSensor = vl53l1x_ns.class_(
 CONF_TIMING_BUDGET = "timing_budget"
 CONF_DISTANCE_MODE = "distance_mode"
 CONF_SIGNAL_THRESHOLD = "signal_threshold"
+CONF_AMBIENT_RATE_SENSOR = "ambient_rate_sensor"
+CONF_AVG_SIGNAL_RATE_SENSOR = "avg_signal_rate_sensor"
+CONF_PEAK_SIGNAL_RATE_SENSOR = "peak_signal_rate_sensor"
 CONF_VALID_TIMING_BUDGET_DM_SHORT = [15, 20, 33, 50, 100, 200, 500]
 CONF_VALID_TIMING_BUDGET_DM_MEDIUM_AND_LONG = [20, 33, 50, 100, 200, 500]
 
@@ -71,6 +74,18 @@ CONFIG_SCHEMA = cv.All(
             cv.Optional(CONF_TIMEOUT, default="10ms"): check_timeout,
             cv.Optional(CONF_ENABLE_PIN): pins.gpio_output_pin_schema,
             cv.Optional(CONF_IRQ_PIN): pins.gpio_input_pin_schema,
+            cv.Optional(CONF_AMBIENT_RATE_SENSOR): sensor.sensor_schema(
+                accuracy_decimals=0,
+                state_class=STATE_CLASS_MEASUREMENT,
+            ),
+            cv.Optional(CONF_AVG_SIGNAL_RATE_SENSOR): sensor.sensor_schema(
+                accuracy_decimals=0,
+                state_class=STATE_CLASS_MEASUREMENT,
+            ),
+            cv.Optional(CONF_PEAK_SIGNAL_RATE_SENSOR): sensor.sensor_schema(
+                accuracy_decimals=0,
+                state_class=STATE_CLASS_MEASUREMENT,
+            ),
         }
     )
     .extend(cv.polling_component_schema("60s"))
@@ -94,4 +109,14 @@ async def to_code(config):
     if CONF_IRQ_PIN in config:
         irq = await cg.gpio_pin_expression(config[CONF_IRQ_PIN])
         cg.add(var.set_irq_pin(irq))
+    if ambient_rate_sensor_config := config.get(CONF_AMBIENT_RATE_SENSOR):
+        sens = await sensor.new_sensor(ambient_rate_sensor_config)
+        cg.add(var.set_ambient_rate_sensor(sens))
+    if avg_signal_rate_sensor_config := config.get(CONF_AVG_SIGNAL_RATE_SENSOR):
+        sens = await sensor.new_sensor(avg_signal_rate_sensor_config)
+        cg.add(var.set_avg_signal_rate_sensor(sens))
+    if peak_signal_rate_sensor_config := config.get(CONF_PEAK_SIGNAL_RATE_SENSOR):
+        sens = await sensor.new_sensor(peak_signal_rate_sensor_config)
+        cg.add(var.set_peak_signal_rate_sensor(sens))
+
     await i2c.register_i2c_device(var, config)
