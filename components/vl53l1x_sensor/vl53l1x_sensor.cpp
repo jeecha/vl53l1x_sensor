@@ -479,7 +479,7 @@ uint16_t VL53L1XSensor::encode_timeout(uint32_t timeout_mclks)
 }
 
 void VL53L1XSensor::set_signal_threshold() {
-    writeWord(0x0066,signal_threshold_>>3);
+    writeWord(0x0066,signal_threshold_>>3); # div by 1024 to convert KCPS to MCPS
 }
 
 } //namespace vl53l1x

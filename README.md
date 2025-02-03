@@ -25,7 +25,7 @@ sensor:
     # If fast response time is critical (e.g., obstacle avoidance in robots), use 20ms-33ms.
     # For general-purpose use, 50ms-100ms provides a good balance. For high accuracy at long distances, use 200ms-500ms.
     timing_budget: 200ms
-    # Signal threashold recomendations:
+    # Signal threshold recomendations:
     # - Use a low threshold (500-1000 kcps) if detecting dark or distant objects.
     # - Use a medium threshold (1000-2000 kcps) for most applications.
     # - Use a high threshold (2000+ kcps) for precise distance measurement with strong signals.
