@@ -1,11 +1,19 @@
-You can use this component by adding this line to your ESPHome project yaml:
+You can integrate this component into your ESPHome project by adding the following lines to your YAML file:
 ```yaml
 external_components:
   - source: github://soldierkam/vl53l1x_sensor
     refresh: 1s
 ```
 
-Sensor configuration:
+Basic configuration:
+```yaml
+sensor:
+  - platform: vl53l1x_sensor
+    id: distance_sensor
+    name: Distance sensor    
+```
+
+Advanced configuration:
 ```yaml
 i2c:
   - id: bus_a
@@ -18,7 +26,7 @@ i2c:
 sensor:
   - platform: vl53l1x_sensor
     id: distance_sensor
-    name: Test sensor
+    name: Distance sensor
     enable_pin: GPIO10 # connected to XSHUT
     distance_mode: MEDIUM # LOW (up to 1.3m, better ambient immunity), MEDIUM (up to 3m), HIGH (up to 4 m, maximum distance)
     # Time required by the sensor to perform one range measurement.
@@ -31,6 +39,16 @@ sensor:
     # - Use a high threshold (2000+ kcps) for precise distance measurement with strong signals.
     signal_threshold: 512
     update_interval: 1s
-    address: 0x32
+    address: 0x32 # default is 0x29
     accuracy_decimals: 2
+    ambient_rate_sensor: # creates sensor to report ambient IR light 
+      id: "ambient_rate"
+      name: "Ambient Rate [MCPS]"
+    avg_signal_rate_sensor: # creates sensor to report average signal 
+      id: "avg_signal_rate"
+      name: "Average Signal Rate [MCPS]"
+    peak_signal_rate_sensor: # creates sensor to report peak signal
+      id: "peak_signal_rate"
+      name: "Peak Signal Rate [MCPS]"
 ```
+MCPS (Mega Counts Per Second) measures the number of detected photon events per second.
