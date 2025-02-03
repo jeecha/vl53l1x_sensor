@@ -10,7 +10,7 @@ namespace vl53l1x {
 
 enum DistanceMode { Short=1, Medium=2, Long=3 };
 
-class VL53L1XSensor : public sensor::Sensor, public PollingComponent, public i2c::I2CDevice {
+class VL53L1XSensor : public PollingComponent, public i2c::I2CDevice {
     public:
     VL53L1XSensor();
 
@@ -49,6 +49,11 @@ class VL53L1XSensor : public sensor::Sensor, public PollingComponent, public i2c
     void set_distance_mode();
     void set_measurement_timing_budget();
     void set_signal_threshold();
+
+    sensor::Sensor *distance_sensor{nullptr};
+    sensor::Sensor *ambient_rate_sensor{nullptr};
+    sensor::Sensor *avg_signal_rate_sensor{nullptr};
+    sensor::Sensor *peak_signal_rate_sensor{nullptr};
 
     static std::list<VL53L1XSensor *> vl53_sensors;
     GPIOPin *enable_pin_{nullptr};
