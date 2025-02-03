@@ -52,3 +52,7 @@ sensor:
       name: "Peak Signal Rate [MCPS]"
 ```
 MCPS (Mega Counts Per Second) measures the number of detected photon events per second.
+
+Sensors reported to Home Assistant:
+
+![Screenshot of sensors reported to Home Assistant](imgs/vl53l1x_sensors.png?raw=true "Home Assistant screenshot")
