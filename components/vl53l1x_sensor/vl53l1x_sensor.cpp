@@ -173,12 +173,12 @@ void VL53L1XSensor::setup() {
     ESP_LOGD(TAG, "'%s' - 0x0008=0x09 0x000b=0x00", this->name_.c_str());
     reg16(0x0008) = 0x09;
     reg16(0x000b) = 0x00;
-    uint16_t sensor_id = sensorId();
-    if(sensor_id != 0xEACC) {
-        ESP_LOGE(TAG,"Wrong sensor id for '%s': 0x%04X", this->name_.c_str(), sensor_id);
-        this->mark_failed();
-        return;
-    }
+    // uint16_t sensor_id = sensorId();
+    // if(sensor_id != 0xEACC) {
+    //     ESP_LOGE(TAG,"Wrong sensor id for '%s': 0x%04X", this->name_.c_str(), sensor_id);
+    //     this->mark_failed();
+    //     return;
+    // }
     set_distance_mode();
     set_measurement_timing_budget();
     set_signal_threshold();
