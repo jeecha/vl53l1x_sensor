@@ -159,17 +159,17 @@ void VL53L1XSensor::setup() {
     for (Addr = 0x2D; Addr <= 0x87; Addr++) {
         reg16(Addr) = VL51L1X_DEFAULT_CONFIGURATION[Addr - 0x2D];
     }
-    ESP_LOGD(TAG, "'%s' - startRanging", this->name_.c_str());
-    startRanging();
-    bool ready = 0;
-    ESP_LOGD(TAG, "'%s' - checkForDataReady", this->name_.c_str());
-    while(ready==0) {
-        ready = checkForDataReady();
-    }
-    ESP_LOGD(TAG, "'%s' - clearInterrupt", this->name_.c_str());
-    clearInterrupt();
-    ESP_LOGD(TAG, "'%s' - stopRanging", this->name_.c_str());
-    stopRanging();
+    // ESP_LOGD(TAG, "'%s' - startRanging", this->name_.c_str());
+    // startRanging();
+    // bool ready = 0;
+    // ESP_LOGD(TAG, "'%s' - checkForDataReady", this->name_.c_str());
+    // while(ready==0) {
+    //     ready = checkForDataReady();
+    // }
+    // ESP_LOGD(TAG, "'%s' - clearInterrupt", this->name_.c_str());
+    // clearInterrupt();
+    // ESP_LOGD(TAG, "'%s' - stopRanging", this->name_.c_str());
+    // stopRanging();
     ESP_LOGD(TAG, "'%s' - 0x0008=0x09 0x000b=0x00", this->name_.c_str());
     reg16(0x0008) = 0x09;
     reg16(0x000b) = 0x00;
